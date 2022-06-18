@@ -1,0 +1,12 @@
+export resourceGroupName=project2
+export location=northeurope
+export storageAccountName=hendriksstorageaccount
+export functionAppName=hendriksfunctionapp
+export webAppName=hendrikswebapp
+export cosmosDBAccountName=hendrikscosmosdbaccount
+export cosmosDBDatabaseName=hendrikscosmosdbdatabase
+export mongoDBConnectionString="mongodb://hendrikscosmosdbaccount:tLErNRLOOhTIMtbFhNxZRNlGrIASNyup2bXkr5QsIqjw22dMs69OMRRUaT0tdwmrajOrBnGStL4KpmRkQv3iiw==@hendrikscosmosdbaccount.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@hendrikscosmosdbaccount@"
+export imageName=functionappimage
+export imageTag=functionapptag
+export containerRegistryName=hendrikssecondcontainerregistry
+export AKSCluster=hendriks akscluster

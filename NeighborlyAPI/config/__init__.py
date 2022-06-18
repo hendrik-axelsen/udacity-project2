@@ -1,0 +1,1 @@
+url = "mongodb://hendrikscosmosdbaccount:tLErNRLOOhTIMtbFhNxZRNlGrIASNyup2bXkr5QsIqjw22dMs69OMRRUaT0tdwmrajOrBnGStL4KpmRkQv3iiw==@hendrikscosmosdbaccount.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@hendrikscosmosdbaccount@"

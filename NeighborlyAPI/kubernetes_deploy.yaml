@@ -1,0 +1,137 @@
+data:
+  FUNCTIONS_WORKER_RUNTIME: cHl0aG9u
+  AzureWebJobsStorage: ''
+apiVersion: v1
+kind: Secret
+metadata:
+  name: hendriksfunctionapp
+---
+data:
+  host.master: TzR5Q0g0djFSNktJZ1MzQ2VQNlVTUlNlQVg0WTg0S1VtTU10YlNqMndiQklBekZ1N3FnR0NBPT0=
+  host.function.default: Q1otNGFBSDBrX3FXYnVRN3VxdndnaDMybkRwa0ZFSll6MUY4VVNaYzBuc0JBekZ1bERzTWhRPT0=
+  host.systemKey.default: LUU3Ri1UNWlSVDQ2dnlzYnJmYUhBZXJwZURGLVluRWg5TUQ2QVhYRWdDclZBekZ1RnVOMGZ3PT0=
+  functions.createadvertisement.default: U3htUkxpWUU3d0hxUGJZaGZnNk9JcjU0Mzc0ZEdsWF9XeDZFYzByelFWaE9BekZ1ZFNfbUJnPT0=
+  functions.deleteadvertisement.default: MG8xQl9ZRW4wNWFONEY4bUttODJjLWRwcGxCS1hCeHFYa1VqRF9ObmlCRTFBekZ1SGNUSXhRPT0=
+  functions.getadvertisement.default: MHVUamRPVEU0YmVCczNKejZQOGU2dnlzbWFjZGZKZm1uXy05U3VoM3pJcENBekZ1S0ItbE1BPT0=
+  functions.getadvertisements.default: ZkFiVHVIY0M4TE0zcG1zSE1hMG4weElEeGtMekEwWWpVMk04Tjk4Mkh3TTRBekZ1N1RMbG1RPT0=
+  functions.getpost.default: S2RPWWFYczdVcXNxTE9oUkg2WXZkVUtwUy0zTWNkeEtWSm45am5kMVNjaG9BekZ1SS1WVDF3PT0=
+  functions.getposts.default: bXhOeGJHNGUxWHoxZk1ERXJtRnkwbTlVWmhDQ1E1Zlg5UzdtcVdJelBtUkxBekZ1Sjl1b0J3PT0=
+  functions.updateadvertisement.default: OUhYREJmOVhFTHBHZmwwRXdQNGo5NlJEQmxCVnFjeFNnQXZfMGo2cWVCbGJBekZ1dmQxU0d3PT0=
+apiVersion: v1
+kind: Secret
+metadata:
+  name: func-keys-kube-secret-hendriksfunctionapp
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: hendriksfunctionapp-function-keys-identity-svc-act
+---
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - secrets
+  - configMaps
+  verbs:
+  - get
+  - list
+  - watch
+  - create
+  - update
+  - patch
+  - delete
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: functions-keys-manager-role
+---
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: functions-keys-manager-role
+subjects:
+- kind: ServiceAccount
+  name: hendriksfunctionapp-function-keys-identity-svc-act
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: hendriksfunctionapp-function-keys-identity-svc-act-functions-keys-manager-rolebinding
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hendriksfunctionapp-http
+spec:
+  selector:
+    app: hendriksfunctionapp-http
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hendriksfunctionapp-http
+  labels:
+    app: hendriksfunctionapp-http
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hendriksfunctionapp-http
+  template:
+    metadata:
+      labels:
+        app: hendriksfunctionapp-http
+    spec:
+      containers:
+      - name: hendriksfunctionapp-http
+        image: hendrikssecondcontainerregistry/hendriksfunctionapp:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: AzureFunctionsJobHost__functions__0
+          value: createAdvertisement
+        - name: AzureFunctionsJobHost__functions__1
+          value: deleteAdvertisement
+        - name: AzureFunctionsJobHost__functions__2
+          value: getAdvertisement
+        - name: AzureFunctionsJobHost__functions__3
+          value: getAdvertisements
+        - name: AzureFunctionsJobHost__functions__4
+          value: getPost
+        - name: AzureFunctionsJobHost__functions__5
+          value: getPosts
+        - name: AzureFunctionsJobHost__functions__6
+          value: updateAdvertisement
+        - name: AzureWebJobsSecretStorageType
+          value: kubernetes
+        - name: AzureWebJobsKubernetesSecretName
+          value: secrets/func-keys-kube-secret-hendriksfunctionapp
+        envFrom:
+        - secretRef:
+            name: hendriksfunctionapp
+        readinessProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 240
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+        startupProbe:
+          failureThreshold: 3
+          periodSeconds: 10
+          successThreshold: 1
+          timeoutSeconds: 240
+          httpGet:
+            path: /
+            port: 80
+            scheme: HTTP
+      serviceAccountName: hendriksfunctionapp-function-keys-identity-svc-act
+---
+
