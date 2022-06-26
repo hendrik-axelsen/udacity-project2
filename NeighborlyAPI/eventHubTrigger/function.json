@@ -1,0 +1,12 @@
+{
+  "scriptFile": "__init__.py",
+  "bindings": [
+    {
+      "type": "eventGridTrigger",
+      "name": "event",
+      "direction": "in",
+      "eventHubName": "hendriksenventhub",
+      "connection": "Endpoint=sb://hendrikseventhub.servicebus.windows.net/;SharedAccessKeyName=hendrikseventhubpolicy;SharedAccessKey=fole5EWaXTe14AL3AQ3JM5ztVBWs4iJnsjnXhYvNpq0=;EntityPath=hendriksenventhub"
+    }
+  ]
+}

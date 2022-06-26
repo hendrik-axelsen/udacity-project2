@@ -144,5 +144,3 @@ def main():
 if __name__ == "__main__":
     main()
 
-# Todo:
-#  Copy over rest from app.py and make sure everything works
