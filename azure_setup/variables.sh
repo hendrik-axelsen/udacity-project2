@@ -10,3 +10,4 @@ export imageName=functionappimage
 export imageTag=functionapptag
 export containerRegistryName=hendrikssecondcontainerregistry
 export AKSCluster=hendriks akscluster
+export logicAppName=hendrikslogicapp
